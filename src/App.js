@@ -1,4 +1,5 @@
 import Header from './Header';
+import SearchItem from './SearchItem';
 import AddItem from "./AddItem";
 import Content from './Content';
 import Footer from './Footer';
@@ -16,17 +17,15 @@ function App() {
       id: 2,
       checked: false,
       item: "Item 2"
-
     },
     {
       id: 3,
       checked: false,
       item: "Item 3"
-
     }
   ]);
   const [newItem, setNewItem] = useState('');
-
+  const [search, setSearch] = useState('');
   const setAndSaveItems = (newItems) => {
     setItems(newItems);
     localStorage.setItem('shoppinglist', JSON.stringify(newItems));
@@ -54,6 +53,7 @@ function App() {
     addItem(newItem);
     setNewItem('');
   }
+  const selectedCount = items.filter(item => item.checked).length;
 
   return (
     <div className="App">
@@ -61,13 +61,21 @@ function App() {
       <AddItem
         newItem={newItem}
         setNewItem={setNewItem}
-        handleSubmit={handleSubmit}/>
+        handleSubmit={handleSubmit}
+      />
+      <SearchItem 
+        search={search}
+        setSearch={setSearch}
+      />
       <Content 
-        items={items}
+        items={items.filter((item) => ((item.item).toLowerCase()).includes(search.toLowerCase()))}
         handleCheck={handleCheck}
         handleDelete={handleDelete}
       />
-      <Footer length={items.length}/>
+      <Footer 
+        length={items.length}
+        selectedCount={selectedCount}
+      />
     </div>
   );
 }
